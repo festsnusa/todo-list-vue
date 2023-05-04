@@ -2,7 +2,9 @@
 .todo 
   .todo__left
     img.todo__icon(alt="toggle" class="todo__incomplete")
-    VeeField.todo__box(v-model="text" name="todo" placeholder="Create a new todo..." type="text" @keyup.enter="addTodo(text)")
+    VeeField.todo__box(v-model="text" name="todo" 
+    placeholder="Create a new todo..." type="text" 
+    @keyup.enter="addingTodo")
 .todolist
   .todo(v-for="todo in todos")
     .todo__left
@@ -37,6 +39,10 @@ export default {
         index == j ? e.classList.add('todofilter__element_active') : e.classList.remove('todofilter__element_active')
       })
     },
+    addingTodo() {
+      this.$emit('addTodo', this.text)
+      this.text = ''
+    }
   },
   updated() {
     // console.log(this.todos)

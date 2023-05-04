@@ -10,6 +10,7 @@ main.main
 <script>
 import { mapStores } from 'pinia';
 import useTodosStore from '@/stores/todos'
+import useModeStore from '@/stores/mode'
 import { uuid } from 'vue-uuid'
 
 import AppHeader from './components/AppHeader.vue';
@@ -24,7 +25,7 @@ export default {
     AppTodoFilter,
   },
   computed: {
-    ...mapStores(useTodosStore)
+    ...mapStores(useTodosStore, useModeStore)
   },
   data() {
     return {
@@ -33,6 +34,7 @@ export default {
       todosAll: this.todos,
       todosActive: [],
       todosCompleted: [],
+      mode: "dark",
     }
   },
   methods: {
@@ -70,6 +72,7 @@ export default {
   },
   created() {
     this.todos = this.todosStore.todosList
+    this.mode = this.modeStore.currentMode
     // window.addEventListener('beforeunload', this.updateTodoList)
   },
 }

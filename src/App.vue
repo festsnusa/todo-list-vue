@@ -2,7 +2,7 @@
 header
   AppHeader
 main.main
-  AppTodo(:todos="chooseTodo()" :addTodo="addTodo" :toggleTodo="toggleTodo" :deleteTodo="deleteTodo" :clearCompleted="clearCompleted")
+  AppTodo(:todos="chooseTodo()" @addTodo="addTodo" :toggleTodo="toggleTodo" :deleteTodo="deleteTodo" :clearCompleted="clearCompleted")
   AppTodoFilter(v-on:changeCurrentFilter="changeCurrentFilter($event)")
   p.footer Drag and drop to reorder list
 </template>
@@ -39,7 +39,6 @@ export default {
     addTodo(value) {
       if (value.length == 0) return
       this.todos.push({ "id": uuid.v1(), "title": value, "completed": false })
-      document.querySelector('.todo__box').value = ''
     },
     toggleTodo(id) {
       let currentTodo = this.todos.find(x => x.id === id)

@@ -6,9 +6,15 @@
 </template>
 
 <script>
+import { mapStores } from 'pinia';
+import useFilterStore from '@/stores/filter'
+
 export default {
   name: "AppTodoFilter",
-  props: ["changeCurrentFilter"],
+  // props: ["changeCurrentFilter"],
+  computed: {
+    ...mapStores(useFilterStore),
+  },
   methods: {
     changeActive(index, filter) {
       let elements = document.querySelectorAll('.todofilter__element')
@@ -16,15 +22,19 @@ export default {
         index == j ? e.classList.add('todofilter__element_active') : e.classList.remove('todofilter__element_active')
       })
 
-      this.$emit('changeCurrentFilter', filter)
+      // this.$emit('changeCurrentFilter', filter)
+      this.filterStore.currentFilter = filter
 
     },
+  },
+  created() {
+    // console.log(this.filterStore.currentFilter)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/vars.scss';
+@import '../assets/vars';
 
 .todofilter {
 

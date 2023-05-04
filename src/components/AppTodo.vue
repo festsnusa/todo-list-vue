@@ -4,51 +4,109 @@
     img.todo__icon.todo__image_incomplete(alt="toggle")
     VeeField.todo__box(v-model="text" name="todo" 
     placeholder="Create a new todo..." type="text" 
-    @keyup.enter="addingTodo")
+    @keyup.enter="addTodo")
 .todolist
-  .todo(v-for="todo in todos")
-    .todo__left
-      img.todo__icon(alt="toggle" :class="todo.completed ? 'todo__image_completed': 'todo__image_incomplete'" @click="toggleTodo(todo.id)")
-      p(:class="todo.completed ? 'todo__paragraph_completed' : 'todo__paragraph_incomplete'") {{ todo.title }}
-    img.todo__close(alt="cross" @click="deleteTodo(todo.id)")
+  draggable(v-model="todos" group="people" @start="drag=true" @end="dragEnd" item-key="id")
+    template(#item="{element}")
+      .todo
+        .todo__left
+          img.todo__icon(alt="toggle" :class="element.completed ? 'todo__image_completed': 'todo__image_incomplete'" @click="toggleTodo(element.id)")
+          p(:class="element.completed ? 'todo__paragraph_completed' : 'todo__paragraph_incomplete'") {{ element.title }}
+        img.todo__close(alt="cross" @click="deleteTodo(element.id)")
   .todolist__footer
     span.todolist__total {{ total }}
     button.todolist__clear(@click="clearCompleted") Clear completed
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+import { mapStores } from 'pinia';
+import useTodosStore from '@/stores/todos'
+import useFilterStore from '@/stores/filter'
+import { uuid } from 'vue-uuid'
+
 export default {
   name: "AppTodo",
-  props: ["todos", "addTodo", "toggleTodo", "deleteTodo", "clearCompleted"],
+  components: {
+    draggable
+  },
   data() {
     return {
       text: '',
+      drag: false,
+      todos: [],
     }
   },
   computed: {
+    ...mapStores(useTodosStore, useFilterStore),
     total() {
-      let todoslength = `${this.todos.filter(e => !e.completed).length}`
+      let todoslength = this.todos.length
       let single = todoslength == 1 ? 'item' : 'items'
       return `${todoslength} ${single} left`
     }
   },
   methods: {
+    dragEnd() {
+
+      let currentFilter = this.filterStore.currentFilter
+
+      if (currentFilter == "all") this.todosStore.todosList = this.todos
+      else if (currentFilter == "active") this.todosStore.todosActive = this.todos
+      else this.todosStore.todosCompleted = this.todos
+
+      this.drag = false
+
+    },
     changeActive(index) {
       let elements = document.querySelectorAll('.todofilter__element')
       elements.forEach((e, j) => {
         index == j ? e.classList.add('todofilter__element_active') : e.classList.remove('todofilter__element_active')
       })
     },
-    addingTodo() {
-      this.$emit('addTodo', this.text)
+    addTodo() {
+      if (this.text.length == 0) return
+      this.todosStore.todosList.push({ "id": uuid.v1(), "title": this.text, "completed": false })
+      this.todos = this.defineTodo(this.filterStore.currentFilter)
       this.text = ''
-    }
+    },
+    toggleTodo(id) {
+      let currentTodo = this.todos.find(x => x.id === id)
+      currentTodo.completed = !currentTodo.completed
+      this.todos = this.defineTodo(this.filterStore.currentFilter)
+    },
+    deleteTodo(id) {
+      this.todosStore.todosList = this.todosStore.todosList.filter(e => e.id !== id)
+      this.todos = this.defineTodo(this.filterStore.currentFilter)
+    },
+    clearCompleted() {
+      this.todosStore.todosList = this.todosStore.todosList.filter(e => e.completed == false)
+      this.todos = this.defineTodo(this.filterStore.currentFilter)
+    },
+    defineTodo(filter) {
+      return filter == 'all'
+        ? this.todosStore.todosList
+        : filter == 'active'
+          ? this.todosStore.todosActive
+          : this.todosStore.todosCompleted
+    },
   },
+  mounted() {
+    let currentFilter = this.filterStore.currentFilter
+    let index = currentFilter == "all" ? 0 : currentFilter == "active" ? 1 : 2
+    this.changeActive(index)
+  },
+  created() {
+    this.todos = this.defineTodo(this.filterStore.currentFilter)
+    this.filterStore.$subscribe((mutation, state) => {
+      this.todos = this.defineTodo(state.currentFilter)
+    })
+
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/vars.scss';
+@import '../assets/vars';
 
 p,
 input {
@@ -80,7 +138,6 @@ input {
     padding: 1rem;
     background-color: hsl(235, 24%, 19%);
     border: none;
-    // border-radius: 1rem;
   }
 
   &__close {

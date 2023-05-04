@@ -4,7 +4,7 @@ import App from './App.vue'
 import UUID from 'vue-uuid'
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
 
-import './assets/_main.scss'
+import './assets/main.scss'
 import { Form as VeeForm, Field as VeeField } from 'vee-validate'
 
 const app = createApp(App)

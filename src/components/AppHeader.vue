@@ -47,11 +47,11 @@ export default {
   align-items: baseline;
 
   &_dark {
-    background-image: url("../images/bg-mobile-dark.jpg");
+    background-image: url("@/images/bg-mobile-dark.jpg");
   }
 
   &_light {
-    background-image: url("../images/bg-mobile-light.jpg");
+    background-image: url("@/images/bg-mobile-light.jpg");
   }
 
   &__title {
@@ -64,11 +64,11 @@ export default {
 
 
     &_dark {
-      content: url("../images/icon-sun.svg");
+      content: url("@/images/icon-sun.svg");
     }
 
     &_light {
-      content: url("../images/icon-moon.svg");
+      content: url("@/images/icon-moon.svg");
     }
   }
 }
@@ -79,11 +79,11 @@ export default {
     padding: 3rem 15rem;
 
     &_dark {
-      background-image: url("../images/bg-desktop-dark.jpg");
+      background-image: url("@/images/bg-desktop-dark.jpg");
     }
 
     &_light {
-      background-image: url("../images/bg-desktop-light.jpg");
+      background-image: url("@/images/bg-desktop-light.jpg");
     }
 
   }

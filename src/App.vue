@@ -11,9 +11,9 @@ main.main(:class="`main_${mode}`")
 import { mapStores } from 'pinia';
 import useModeStore from '@/stores/mode'
 
-import AppHeader from './components/AppHeader.vue';
-import AppTodo from './components/AppTodo.vue';
-import AppTodoFilter from './components/AppTodoFilter.vue';
+import AppHeader from '@/components/AppHeader.vue';
+import AppTodo from '@/components/AppTodo.vue';
+import AppTodoFilter from '@/components/AppTodoFilter.vue';
 
 export default {
   name: "App",
@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import './assets/vars';
+@import '@/assets/vars.scss';
 
 .main {
   padding: 2rem;

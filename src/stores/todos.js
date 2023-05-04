@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-// import { uuid } from 'vue-uuid'
 
 export default defineStore('todos', {
   state: () => ({

@@ -115,7 +115,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/vars';
+@import '@/assets/vars.scss';
 
 p,
 input {
@@ -158,7 +158,7 @@ input {
 
   &__close {
     cursor: pointer;
-    content: url('../images/icon-cross.svg');
+    content: url('@/images/icon-cross.svg');
   }
 
   &__icon {
@@ -169,7 +169,7 @@ input {
 
   &__image {
     &_completed {
-      content: url('../images/icon-check.svg');
+      content: url('@/images/icon-check.svg');
       background: linear-gradient(to right,
           hsl(192, 100%, 67%),
           hsl(280, 87%, 65%));

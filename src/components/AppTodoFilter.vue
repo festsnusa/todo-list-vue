@@ -27,8 +27,16 @@ export default {
 @import '../assets/vars.scss';
 
 .todofilter {
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  padding: 1rem;
+  background-color: $blueDesaturated;
+
   &__element {
-    color: $gray;
+    color: #5B5C78;
     cursor: pointer;
 
     &_active {

@@ -1,5 +1,5 @@
 <template lang="pug">
-.todofilter 
+.todofilter(:class="`todofilter_${mode}`")
   span.todofilter__element.todofilter__element_active(@click="changeActive(0, 'all')") All 
   span.todofilter__element(@click="changeActive(1, 'active')") Active 
   span.todofilter__element(@click="changeActive(2, 'completed')") Completed
@@ -8,12 +8,17 @@
 <script>
 import { mapStores } from 'pinia';
 import useFilterStore from '@/stores/filter'
+import useModeStore from '@/stores/mode'
 
 export default {
   name: "AppTodoFilter",
-  // props: ["changeCurrentFilter"],
   computed: {
-    ...mapStores(useFilterStore),
+    ...mapStores(useFilterStore, useModeStore),
+  },
+  data() {
+    return {
+      mode: '',
+    }
   },
   methods: {
     changeActive(index, filter) {
@@ -22,13 +27,16 @@ export default {
         index == j ? e.classList.add('todofilter__element_active') : e.classList.remove('todofilter__element_active')
       })
 
-      // this.$emit('changeCurrentFilter', filter)
       this.filterStore.currentFilter = filter
 
     },
   },
   created() {
-    // console.log(this.filterStore.currentFilter)
+    this.mode = this.modeStore.mode
+
+    this.modeStore.$subscribe((mutation, state) => {
+      this.mode = state.mode
+    })
   }
 }
 </script>
@@ -42,8 +50,17 @@ export default {
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  padding: 1rem;
-  background-color: $blueDesaturated;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 1rem;
+
+  &_dark {
+    background-color: $blueDesaturated;
+  }
+
+  &_light {
+    background-color: #fff;
+  }
 
   &__element {
     color: #5B5C78;
@@ -52,6 +69,7 @@ export default {
     &_active {
       color: $blueBright;
     }
+
   }
 }
 </style>

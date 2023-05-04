@@ -75,6 +75,9 @@ export default {
 
 @media (min-width: 1000px) {
   .header {
+
+    padding: 3rem 15rem;
+
     &_dark {
       background-image: url("../images/bg-desktop-dark.jpg");
     }

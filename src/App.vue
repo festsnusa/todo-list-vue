@@ -48,19 +48,31 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import './assets/vars';
+
 .main {
   padding: 2rem;
-  height: 100vh;
   gap: 1rem;
 
   &_dark {
     background-color: #161722;
   }
 
+  &_light {
+    background-color: $grayLight;
+  }
+
   &__footer {
     display: flex;
     justify-content: center;
     color: #5B5C78;
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1000px) {
+  .main {
+    padding: 0 15rem;
   }
 }
 </style>

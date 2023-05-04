@@ -2,10 +2,11 @@
 .todo.todo_borderless
   .todo__left
     img.todo__icon.todo__image_incomplete(alt="toggle")
-    VeeField.todo__box(v-model="text" name="todo" 
+    VeeField.todo__box(:class="`todo__box_${mode}`"
+    v-model="text" name="todo" 
     placeholder="Create a new todo..." type="text" 
     @keyup.enter="addTodo")
-.todolist
+.todolist(:class="`todolist_${mode}`")
   draggable(v-model="todos" group="people" @start="drag=true" @end="dragEnd" item-key="id")
     template(#item="{element}")
       .todo
@@ -23,6 +24,7 @@ import draggable from 'vuedraggable'
 import { mapStores } from 'pinia';
 import useTodosStore from '@/stores/todos'
 import useFilterStore from '@/stores/filter'
+import useModeStore from '@/stores/mode'
 import { uuid } from 'vue-uuid'
 
 export default {
@@ -35,10 +37,11 @@ export default {
       text: '',
       drag: false,
       todos: [],
+      mode: ''
     }
   },
   computed: {
-    ...mapStores(useTodosStore, useFilterStore),
+    ...mapStores(useTodosStore, useFilterStore, useModeStore),
     total() {
       let todoslength = this.todos.length
       let single = todoslength == 1 ? 'item' : 'items'
@@ -101,6 +104,12 @@ export default {
       this.todos = this.defineTodo(state.currentFilter)
     })
 
+    this.mode = this.modeStore.mode
+
+    this.modeStore.$subscribe((mutation, state) => {
+      this.mode = state.mode
+    })
+
   }
 }
 </script>
@@ -136,8 +145,15 @@ input {
   &__box {
     width: 100%;
     padding: 1rem;
-    background-color: hsl(235, 24%, 19%);
     border: none;
+
+    &_dark {
+      background-color: hsl(235, 24%, 19%);
+    }
+
+    &_light {
+      background-color: #fff;
+    }
   }
 
   &__close {
@@ -179,9 +195,17 @@ input {
 
 .todolist {
   border-radius: 1rem;
-  background-color: hsl(235, 24%, 19%);
   width: 100%;
   line-height: 3.5rem;
+  box-shadow: 2px 12px 8px 0px rgba(34, 60, 80, 0.2);
+
+  &_dark {
+    background-color: $blueDesaturated;
+  }
+
+  &_light {
+    background-color: #fff;
+  }
 
   &__footer {
     display: flex;

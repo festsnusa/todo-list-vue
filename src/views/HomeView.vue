@@ -53,6 +53,7 @@ export default {
 .main {
   padding: 2rem;
   gap: 1rem;
+  height: 100vh;
 
   &_dark {
     background-color: #161722;

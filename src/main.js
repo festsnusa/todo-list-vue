@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import UUID from 'vue-uuid'
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
+import router from './router'
 
 import '@/assets/main.scss'
 import { Form as VeeForm, Field as VeeField } from 'vee-validate'
@@ -12,6 +13,7 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedState)
 
 app.use(pinia)
+app.use(router)
 app.use(UUID)
 app.component("VeeForm", VeeForm)
 app.component("VeeField", VeeField)

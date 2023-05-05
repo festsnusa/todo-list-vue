@@ -7,10 +7,10 @@ const routes = [
     path: "/",
     component: HomeView
   },
-  // {
-  //   path: '/:catchAll(.*)*',
-  //   redirect: { name: 'home' },
-  // }
+  {
+    path: '/:catchAll(.*)*',
+    redirect: { name: 'home' },
+  }
 ]
 
 const router = createRouter({
